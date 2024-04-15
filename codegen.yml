@@ -1,0 +1,27 @@
+# GraphQL Code Generator relies on a configuration file named codegen.ts to manage all possible options, input, and output document types. The CLI automatically detects the defined config file and generates code accordingly. 
+
+# Using this file:
+# run * npx graphql-codegen * and it does not require any separate installations
+
+# pointing to the graphql API
+schema: https://spacex-production.up.railway.app/
+
+# It will scan all the tsx files and look for GraphQL queries and --
+documents: "src/**/*.tsx"
+
+#  __This is just one of the ways of setting up a codegen file__
+# --  will generate multiple files
+generates:
+  ./types.ts:
+    plugins:
+      - typescript
+  
+  ./:
+    preset: near-operation-file
+    presetsConfig:
+      extension: .generated.tsx
+      # Creates a central file, types.ts, for holding all the types for the schema, then it uses the near-operation-file-preset to generate a file[If a tsx file has some GraphQL, it will create a new file with the filename ``filename.generated.tsx`` which creates the types for that specific GraphQL operation]. The Good thing about that is the result of that operation, tree shakes. If the types for every query is generated in one single files, many bundlers don't tree shake, as most bundlers don't tree shake on a per-operation level, but rather on per-file level. So if the file is referenced, the first load of the app will download all the queries that are there, which can be a lot.
+      baseTypesPath: types.ts
+    plugins:
+      - typescript-operations
+      - typed-document-
