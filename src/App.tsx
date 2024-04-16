@@ -1,5 +1,5 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, gql, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, gql, useSuspenseQuery } from '@apollo/client'
+import { Suspense, useState } from 'react'
 import { GetAllLaunchesDocument } from './App.generated';
 
 
@@ -41,17 +41,24 @@ const client = new ApolloClient({
     /* const result = useQuery(GET_ALL_LAUNCHES, { variables: { first: 50 }}); 
       This resule would create a circular refernece, as this will contain the reference to the client, which will contain the reference to the cache, which will contain the reference to the client, and so on.
       GET_ALL_LAUNCHES => GetAllLaunchesDocument = => will make the result of the query operation to be typed. 
-    */
-    const { loading, data } = useQuery(GetAllLaunchesDocument, { variables: { first: 50 } });
 
-    if(loading) return <p>Loading...</p>;
+      -----
+
+      useQuery would be replaced with useSuspenseQuery when using suspense to fetch data for the component.
+
+      loading won't be available in useSuspenseQuery as useSuspenseQuery guarantees that if this component renders the data is always there. so the ? can be dropped from data?.launches, as it is guaranteed that the data is there, but the the second ? for launches?.map() can stay as it is nullable, as per the scehma(hover over to get more info).
+
+      useSuspenseQuery moves the loading state out of the component, so that is not somethingto be worried about, so the loading state is something that would be managed in the UI when the developer wants it to be visible. Even if there are multiple components within the Suspense block, the loading state would be displayed until all teh components are ready to be rendered. 
+      This feature can be used to deal with parts of the UI where components can be separated into separate Suspense boundaries, as per the sections they are grouped under so each parts display their loading state separately, and not be dependent on parts of the UI from different section. This helps design a coherent UI, rather than parts of the UI being loaded at different times in a certian, which can seem rather disfunctional.
+    */
+    const {  data } = useSuspenseQuery(GetAllLaunchesDocument, { variables: { first: 50 } });
 
     console.log("Data from the GetAllLaunchesDocument:\t",data?.launches?.at(0)?.rocket?.rocket_type);
 
     return(
       <pre>
-        {data?.launches?.map((launch: any) => (
-          <span key={launch.mission_name}>
+        {data.launches?.map((launch: any) => (
+          <span className='' key={launch.mission_name}>
             <h3>{launch.mission_name}: {launch.rocket.rocket_name} - {launch.rocket.rocket.engines.type} - {launch.rocket.rocket_type}({launch.launch_year})</h3>
           </span>
         ))}
@@ -64,7 +71,9 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <List />
+      <Suspense fallback={<p>Loading...</p>}>
+        <List />
+      </Suspense>
     </ApolloProvider>
   )
 }
