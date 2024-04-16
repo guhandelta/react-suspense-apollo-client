@@ -18,10 +18,10 @@ generates:
   
   ./:
     preset: near-operation-file
-    presetsConfig:
+    presetConfig:
       extension: .generated.tsx
       # Creates a central file, types.ts, for holding all the types for the schema, then it uses the near-operation-file-preset to generate a file[If a tsx file has some GraphQL, it will create a new file with the filename ``filename.generated.tsx`` which creates the types for that specific GraphQL operation]. The Good thing about that is the result of that operation, tree shakes. If the types for every query is generated in one single files, many bundlers don't tree shake, as most bundlers don't tree shake on a per-operation level, but rather on per-file level. So if the file is referenced, the first load of the app will download all the queries that are there, which can be a lot.
       baseTypesPath: types.ts
     plugins:
       - typescript-operations
-      - typed-document-
+      - typed-document-node

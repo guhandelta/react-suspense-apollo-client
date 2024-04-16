@@ -26,7 +26,7 @@ const client = new ApolloClient({
 
   const List = () => {
     /* const result = useQuery(GET_ALL_FILMS, { variables: { first: 50 }}); 
-      This resule would create a circular refernece, as this will contain teh reference ot the client, which will contain the reference to the cache, which will contain the reference to the client, and so on.*/
+      This resule would create a circular refernece, as this will contain the reference to the client, which will contain the reference to the cache, which will contain the reference to the client, and so on.*/
     const { loading, data } = useQuery(GET_ALL_FILMS, { variables: { first: 50 } });
 
     if(loading) return <p>Loading...</p>;
