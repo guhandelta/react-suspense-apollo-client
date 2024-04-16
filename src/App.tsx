@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, gql, useSuspenseQuery } from '@apollo/client'
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, useSuspenseQuery } from '@apollo/client'
 import { Suspense, useState, useTransition } from 'react'
 import { GetAllLaunchesDocument } from './App.generated';
 
