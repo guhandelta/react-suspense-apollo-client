@@ -17,17 +17,17 @@ const client = new ApolloClient({
   
   Query: Adding(fetching) the id would normalize the date, by adding the id as a refernce, to help identify the by the id, to know by refernce whihc data was updated. So if the title of one of the entries was changed, and get the one specific entry from the mutation, it would be able to update the list, without needing to do another request to the list.
   */
-  const GET_ALL_Launches = gql`query GetAllLaunches($limit: Int, $offset: Int){
-    launches( limit: $limit, offset: $offset) {
-      id
-      rocket {
-        rocket_name
-        rocket_type
-      }
-      mission_name
-      details
-    }
-  }`
+  // const GET_ALL_Launches = gql`query GetAllLaunches($limit: Int, $offset: Int){
+  //   launches( limit: $limit, offset: $offset) {
+  //     id
+  //     rocket {
+  //       rocket_name
+  //       rocket_type
+  //     }
+  //     mission_name
+  //     details
+  //   }
+  // }`
 
 
   const List = () => {
